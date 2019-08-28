@@ -13,6 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 
@@ -30,6 +34,7 @@ public class Main2Activity extends AppCompatActivity {
 
     public String age1;
     public String gender;
+    public ArrayList<Utilisateur> value;
 
 
 
@@ -45,6 +50,8 @@ public class Main2Activity extends AppCompatActivity {
             editText = findViewById(R.id.input);
 
             button = findViewById(R.id.create_button);
+
+        value = new ArrayList<>();
 
 //getting device ID
         final String id= Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -80,10 +87,10 @@ public class Main2Activity extends AppCompatActivity {
           age1 = editText.getText().toString();
             gender = checkedValue();
         //Create the Map
-        ArrayList<Utilisateur> value = new ArrayList<>();
 
 
-        Utilisateur user = new Utilisateur("23","30","25",gender,age1);
+
+        Utilisateur user = new Utilisateur("23","30","25",gender,editText.getText().toString());
 
         value.add(user);
 
@@ -94,14 +101,13 @@ public class Main2Activity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
+
                 // Write a message to the database
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference("utilisateur");
                 myRef.child(id).setValue(value);
 
-                 */
-                Toast.makeText(Main2Activity.this,age1+"",Toast.LENGTH_LONG).show();
+
             }
         });
 
