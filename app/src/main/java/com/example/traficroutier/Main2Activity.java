@@ -2,6 +2,8 @@ package com.example.traficroutier;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -106,6 +108,10 @@ public class Main2Activity extends AppCompatActivity {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference("utilisateur");
                 myRef.child(id).setValue(value);
+
+                Intent intent=new Intent(Main2Activity.this,Affiche_Carte.class);
+
+                startActivity(intent);
 
 
             }
