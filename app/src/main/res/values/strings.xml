@@ -8,4 +8,8 @@
     <string name="age">Age :</string>
     <string name="creer">Creer</string>
     <string name="button">Show</string>
+    <string name="pseudo">pseudo</string>
+    <string name="email">Email</string>
+    <string name="password">password</string>
+    <string name="pwd">Confirmer password</string>
 </resources>
