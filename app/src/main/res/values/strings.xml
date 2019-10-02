@@ -12,4 +12,5 @@
     <string name="email">Email</string>
     <string name="password">password</string>
     <string name="pwd">Confirmer password</string>
+    <string name="text">Saisissez votre age</string>
 </resources>
