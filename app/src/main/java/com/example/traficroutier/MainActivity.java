@@ -1,20 +1,19 @@
 package com.example.traficroutier;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
+
 
 import android.Manifest;
-import android.app.FragmentManager;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+
 import android.location.Location;
-import android.location.LocationListener;
+
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -31,16 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.GeoApiContext;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private String latitude,longitude;
 
     private Double lat,longi;
+
+    //JSON Nodes names
+
+    private static final String TAG_message = "message" ;
 
     private LocationManager locationManager;
     private Button button;
@@ -104,7 +98,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Check permissions again
 
-        if(ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        if(ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)
         {
             //Add permissions
             ActivityCompat.requestPermissions(this,new String[]
@@ -190,14 +187,16 @@ public class MainActivity extends AppCompatActivity {
         else
         {
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST,"http://d47f524c.ngrok.io/Traffic/send.php", new Response.Listener<String>() {
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,"http://1660a788.ngrok.io/Traffic/send.php",
+                    new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
 
-                    Intent intent = new Intent(getApplicationContext(),Main2Activity.class);
-                    intent.putExtra("latitude",lat);
-                    intent.putExtra("longitude",longi);
-                    startActivity(intent);
+                        Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+                        intent.putExtra("latitude", lat);
+                        intent.putExtra("longitude", longi);
+                        startActivity(intent);
+
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -224,6 +223,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
     //Recuperer les radios
 
     public String checked()
@@ -245,17 +246,13 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
+    //Recuperer l'IMEI du telephone de l'utilisateur
+
     public String Imei()
     {
         String ImeiValue =  Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         return ImeiValue;
     }
-
-
-
-
-
-
 
 }

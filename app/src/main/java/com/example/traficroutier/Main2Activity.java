@@ -1,22 +1,16 @@
 package com.example.traficroutier;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.FragmentManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,9 +27,8 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
 
     private MapFragment mapFragment;
     private GoogleMap googleMap;
-    private Location mlocation;
 
-    Double as , sa;
+    Double lattitude , longitudee;
 
 
 
@@ -52,16 +45,18 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
 
         Intent intent = getIntent();
 
-       as= intent.getDoubleExtra("latitude",0);
-         sa=intent.getDoubleExtra("longitude",0);
+       lattitude= intent.getDoubleExtra("latitude",0);
+         longitudee=intent.getDoubleExtra("longitude",0);
 
 
-        OnGPS();
+
     }
     public void checkPermissions()
     {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -125,11 +120,10 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
                 //Enable the location
                 googleMap.setMyLocationEnabled(true);
                 //get a marker in the location of the user
-                marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(as,sa))
-                        .title("THE user"));
+                marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lattitude,longitudee))
+                        .title("USER"));
                 //show the traffic situation
                 googleMap.setTrafficEnabled(true);
-
             }
         });
     }
@@ -137,10 +131,7 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
     @Override
     protected void onResume() {
         super.onResume();
-
         checkPermissions();
-
-
     }
 
 
@@ -173,38 +164,10 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
         {
             LatLng googlePosition = new LatLng(latitude,longitude);
             //googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
-            //googleMap.addMarker(new MarkerOptions().position(googlePosition).title("the User"));
-
             //marker.setPosition(googlePosition);
 
-            /*
-             polyline.add(googlePosition).width(5);
-             googleMap.addPolyline(polyline);
-             */
         }
 
-
-
-    }
-
-    private void OnGPS() {
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-            }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        final AlertDialog alertDialog = builder.create();
-
-        alertDialog.show();
     }
 
 }
