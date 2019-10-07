@@ -97,15 +97,10 @@ public class MainActivity extends AppCompatActivity {
 
         editor.apply();
 
-
-
-
-
-
     }
 
 
-    //Get value and return String
+    //Get value and return boolean
     public static boolean read(Context context, String name, boolean defaultValue)
     {
         SharedPreferences sharedPreferences = context.getSharedPreferences("test", Context.MODE_PRIVATE);
@@ -236,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("latitude", lat);
                         intent.putExtra("longitude", longi);
                         startActivity(intent);
+                        finish();
 
                 }
             }, new Response.ErrorListener() {
