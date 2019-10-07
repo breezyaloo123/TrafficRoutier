@@ -10,6 +10,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import android.location.Location;
@@ -57,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(read(getApplicationContext(),"session",false))
+        {
+            Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+            startActivity(intent);
+            finish();
+        }
+
         //Add permissions
         ActivityCompat.requestPermissions(this,new String[]
                 {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_LOCATION);
@@ -70,8 +78,39 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 LoginPost();
                 ProvideLocation();
+                save(getApplicationContext(),"session",true);
+
+
             }
         });
+
+    }
+
+    //Void Saving
+    public static void save(Context context , String name ,boolean value)
+    {
+
+        SharedPreferences.Editor editor =  context.getSharedPreferences("test",Context.MODE_PRIVATE).edit();
+
+
+        editor.putBoolean(name,true);
+
+        editor.apply();
+
+
+
+
+
+
+    }
+
+
+    //Get value and return String
+    public static boolean read(Context context, String name, boolean defaultValue)
+    {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("test", Context.MODE_PRIVATE);
+
+        return sharedPreferences.getBoolean(name, defaultValue);
 
     }
 
@@ -187,7 +226,8 @@ public class MainActivity extends AppCompatActivity {
         else
         {
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST,"http://1660a788.ngrok.io/Traffic/send.php",
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,"http://a9edc3e6.ngrok.io/Traffic/send.php",
                     new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {

@@ -48,6 +48,8 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
        lattitude= intent.getDoubleExtra("latitude",0);
          longitudee=intent.getDoubleExtra("longitude",0);
 
+         loadMap();
+
 
 
     }
