@@ -11,12 +11,18 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Main2Activity extends AppCompatActivity implements LocationListener {
 
@@ -29,8 +35,6 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
     private GoogleMap googleMap;
 
     Double lattitude , longitudee;
-
-
 
 
     @Override
@@ -122,7 +126,7 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
                 //Enable the location
                 googleMap.setMyLocationEnabled(true);
                 //get a marker in the location of the user
-                marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lattitude,longitudee))
+               marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lattitude,longitudee))
                         .title("USER"));
                 //show the traffic situation
                 googleMap.setTrafficEnabled(true);
@@ -160,14 +164,29 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
 
         double longitude = location.getLongitude();
 
+        float vitesse = location.getSpeed();
+        //getting the format of the time and the date
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        //getting the format in to string
+        String formatdate= sdf.format(new Date(location.getTime()));
+
+        Toast.makeText(getApplicationContext(),"Vitesse est "+ vitesse,Toast.LENGTH_LONG).show();
+
+        Toast.makeText(getApplicationContext()," "+formatdate,Toast.LENGTH_LONG).show();
+
+        Log.d("Vitesse","good");
+
         //Toast.makeText(getApplicationContext(),"Coordonnees: "+latitude + "/"+ longitude,Toast.LENGTH_LONG).show();
 
         if(googleMap != null)
         {
             LatLng googlePosition = new LatLng(latitude,longitude);
             //googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
-            //marker.setPosition(googlePosition);
+            /*
+            marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lattitude,longitudee))
+            .title(""+formatdate));
 
+             */
         }
 
     }

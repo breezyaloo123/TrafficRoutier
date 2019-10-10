@@ -43,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_LOCATION = 1;
     private RadioButton male,female;
 
-    private String latitude,longitude;
+    private String latitude,longitude,speed;
 
     private Double lat,longi;
+
+    private float vitesse;
 
     //JSON Nodes names
 
@@ -57,13 +59,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        /*
         if(read(getApplicationContext(),"session",false))
         {
             Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
             startActivity(intent);
             finish();
         }
+
+         */
 
         //Add permissions
         ActivityCompat.requestPermissions(this,new String[]
@@ -78,14 +82,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 LoginPost();
                 ProvideLocation();
-                save(getApplicationContext(),"session",true);
+               // save(getApplicationContext(),"session",true);
 
 
             }
         });
 
     }
-
+    /*
     //Void Saving
     public static void save(Context context , String name ,boolean value)
     {
@@ -108,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
         return sharedPreferences.getBoolean(name, defaultValue);
 
     }
+
+     */
 
     public void ProvideLocation()
     {
@@ -152,20 +158,28 @@ public class MainActivity extends AppCompatActivity {
                  lat=locationGps.getLatitude();
                  longi = locationGps.getLongitude();
 
+                 vitesse = locationGps.getSpeed();
+
                 latitude = String.valueOf(lat);
 
                 longitude = String.valueOf(longi);
+
+                speed = String.valueOf(vitesse);
 
 
             }
             else if(locationNetwork != null)
             {
-                Double lat=locationNetwork.getLatitude();
-                Double longi = locationNetwork.getLongitude();
+                 lat=locationNetwork.getLatitude();
+                 longi = locationNetwork.getLongitude();
+                 vitesse = locationNetwork.getSpeed();
+
 
                 latitude = String.valueOf(lat);
 
                 longitude = String.valueOf(longi);
+
+                speed = String.valueOf(vitesse);
 
             }
             else if(locationPassive != null)
@@ -173,9 +187,13 @@ public class MainActivity extends AppCompatActivity {
                 Double lat=locationPassive.getLatitude();
                 Double longi=locationPassive.getLongitude();
 
+                vitesse = locationPassive.getSpeed();
+
                 latitude = String.valueOf(lat);
 
                 longitude = String.valueOf(longi);
+
+                speed = String.valueOf(vitesse);
 
             }
             else
@@ -222,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         {
 
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST,"http://a9edc3e6.ngrok.io/Traffic/send.php",
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,"http://d7a8d9e5.ngrok.io/Traffic/send.php",
                     new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -250,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
                     param.put("Ages",editText.getText().toString());
                     param.put("longitude",longitude);
                     param.put("latitude",latitude);
+                    param.put("vitesse",speed);
 
 
                     return param;
