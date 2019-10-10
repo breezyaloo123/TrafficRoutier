@@ -1,12 +1,15 @@
 package com.example.traficroutier;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -14,15 +17,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class Main2Activity extends AppCompatActivity implements LocationListener {
 
@@ -36,6 +45,8 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
 
     Double lattitude , longitudee;
 
+    private FusedLocationProviderClient fusedLocationProviderClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +56,21 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
         FragmentManager fragmentManager = getFragmentManager();
 
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
+/*
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+
+                if(location != null)
+                {
+                    Toast.makeText(getApplicationContext()," "+location.getLongitude()+" "+location.getLatitude(),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        
+ */
 
         Intent intent = getIntent();
 
@@ -57,6 +82,9 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
 
 
     }
+
+
+
     public void checkPermissions()
     {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -133,6 +161,8 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
             }
         });
     }
+    //getting tha last location of the device
+
 
     @Override
     protected void onResume() {
@@ -170,11 +200,27 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
         //getting the format in to string
         String formatdate= sdf.format(new Date(location.getTime()));
 
+        //Geocoder will allow us to get the address
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude,longitude,1);
+            if(addresses.size() > 0)
+            {
+                //we get the City's name , the twin's name and the Country's name
+                Toast.makeText(getApplicationContext()," "+addresses.get(0).getAddressLine(0),Toast.LENGTH_LONG).show();
+                Log.d("address",""+addresses.get(0).getAddressLine(0));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Toast.makeText(getApplicationContext(),"Vitesse est "+ vitesse,Toast.LENGTH_LONG).show();
 
-        Toast.makeText(getApplicationContext()," "+formatdate,Toast.LENGTH_LONG).show();
+        Log.d("time"," "+formatdate);
 
-        Log.d("Vitesse","good");
+
 
         //Toast.makeText(getApplicationContext(),"Coordonnees: "+latitude + "/"+ longitude,Toast.LENGTH_LONG).show();
 
@@ -182,11 +228,7 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
         {
             LatLng googlePosition = new LatLng(latitude,longitude);
             //googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
-            /*
-            marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lattitude,longitudee))
-            .title(""+formatdate));
 
-             */
         }
 
     }

@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         {
 
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST,"http://d7a8d9e5.ngrok.io/Traffic/send.php",
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,"http://d3175019.ngrok.io/Traffic/send.php",
                     new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
