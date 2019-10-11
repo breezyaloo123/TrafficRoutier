@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
+import android.database.Cursor;
 import android.location.Location;
 
 import android.location.LocationManager;
@@ -47,10 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Double lat,longi;
 
+    private BDUser database;
+
     private float vitesse;
 
     //JSON Nodes names
-
     private static final String TAG_message = "message" ;
 
     private LocationManager locationManager;
@@ -59,15 +61,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*
+
+
+
+        check();
+            /*
         if(read(getApplicationContext(),"session",false))
         {
             Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
             startActivity(intent);
             finish();
         }
-
-         */
+             */
 
         //Add permissions
         ActivityCompat.requestPermissions(this,new String[]
@@ -82,14 +87,29 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 LoginPost();
                 ProvideLocation();
-               // save(getApplicationContext(),"session",true);
+                //save(getApplicationContext(),"session",true);
 
+                database.insertData(Imei());
 
             }
         });
 
     }
-    /*
+
+    //check if the imei value exists inside the database
+
+    public void check()
+    {
+        Cursor cursor = database.afficher();
+
+        if(cursor.getString(0)!=Imei())
+        {
+            Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+/*
     //Void Saving
     public static void save(Context context , String name ,boolean value)
     {
@@ -113,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-     */
+ */
 
     public void ProvideLocation()
     {
