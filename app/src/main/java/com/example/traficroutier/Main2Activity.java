@@ -198,6 +198,7 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
             public void onMapReady(GoogleMap googleMap) {
                 Main2Activity.this.googleMap = googleMap;
 
+                //Allow to US to have zoom buttons (+ , -)
                 UiSettings uiSettings = googleMap.getUiSettings();
                 uiSettings.setCompassEnabled(true);
                 uiSettings.setZoomControlsEnabled(true);
