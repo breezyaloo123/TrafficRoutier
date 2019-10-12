@@ -64,15 +64,19 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        check();
-            /*
+      // check();
+/*
         if(read(getApplicationContext(),"session",false))
         {
             Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
             startActivity(intent);
             finish();
         }
-             */
+
+ */
+
+
+
 
         //Add permissions
         ActivityCompat.requestPermissions(this,new String[]
@@ -87,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 LoginPost();
                 ProvideLocation();
-                //save(getApplicationContext(),"session",true);
+               //save(getApplicationContext(),"session",true);
 
-                database.insertData(Imei());
+                //database.insertData(Imei());
 
             }
         });
@@ -97,18 +101,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //check if the imei value exists inside the database
-
+/*
     public void check()
     {
         Cursor cursor = database.afficher();
 
-        if(cursor.getString(0)!=Imei())
+        if(cursor.getString(0) == Imei())
         {
             Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
             startActivity(intent);
             finish();
         }
     }
+
+ */
 /*
     //Void Saving
     public static void save(Context context , String name ,boolean value)
@@ -134,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
  */
+
 
     public void ProvideLocation()
     {
@@ -260,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
         {
 
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST,"http://d3175019.ngrok.io/Traffic/send.php",
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,"http://d5a43abf.ngrok.io/Traffic/send.php",
                     new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {

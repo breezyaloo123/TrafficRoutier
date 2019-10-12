@@ -18,6 +18,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -46,6 +47,11 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
     private MapFragment mapFragment;
     private GoogleMap googleMap;
 
+    private TextView textView;
+
+
+    private static float vitesse;
+
     Double lattitude , longitudee;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -59,6 +65,8 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
         FragmentManager fragmentManager = getFragmentManager();
 
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
+
+        textView = findViewById(R.id.value);
 /*
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -76,6 +84,8 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
  */
 
         OnGPS();
+
+
 
         Intent intent = getIntent();
 
@@ -169,6 +179,9 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
         }
     }
 
+
+
+//Loading the map
     private void loadMap()
     {
         mapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -182,8 +195,11 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
                 //get a marker in the location of the user
                marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lattitude,longitudee))
                         .title("USER"));
+
+
                 //show the traffic situation
                 googleMap.setTrafficEnabled(true);
+
             }
         });
     }
@@ -220,7 +236,7 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
 
         double longitude = location.getLongitude();
 
-        float vitesse = location.getSpeed();
+        vitesse = location.getSpeed();
         //getting the format of the time and the date
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         //getting the format in to string
@@ -234,21 +250,17 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
             List<Address> addresses = geocoder.getFromLocation(latitude,longitude,1);
             if(addresses.size() > 0)
             {
-                //we get the City's name , the twin's name and the Country's name
-                Toast.makeText(getApplicationContext()," "+addresses.get(0).getAddressLine(0),Toast.LENGTH_LONG).show();
+                //we get the City's name , the twin's name and the Country's name by using addresses.get(0).geAddressLine(0)
                 Log.d("address",""+addresses.get(0).getAddressLine(0));
+
+                textView.setText("la vitesse est :"+vitesse+" m/s"+"\n"+"Emplacement :"+addresses.get(0).getAddressLine(0));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Toast.makeText(getApplicationContext(),"Vitesse est "+ vitesse,Toast.LENGTH_LONG).show();
-
         Log.d("time"," "+formatdate);
 
-
-
-        //Toast.makeText(getApplicationContext(),"Coordonnees: "+latitude + "/"+ longitude,Toast.LENGTH_LONG).show();
 
         if(googleMap != null)
         {
