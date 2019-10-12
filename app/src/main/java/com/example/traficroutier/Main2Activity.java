@@ -24,9 +24,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -195,8 +197,11 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 Main2Activity.this.googleMap = googleMap;
-                //Allow to the user to do Zooms
-                // googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
+
+                UiSettings uiSettings = googleMap.getUiSettings();
+                uiSettings.setCompassEnabled(true);
+                uiSettings.setZoomControlsEnabled(true);
+                uiSettings.setMyLocationButtonEnabled(true);
                 //Enable the location
                 googleMap.setMyLocationEnabled(true);
                 //get a marker in the location of the user
@@ -239,9 +244,9 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
     @Override
     public void onLocationChanged(Location location) {
 
-        double latitude = location.getLatitude();
+        Double latitude = location.getLatitude();
 
-        double longitude = location.getLongitude();
+        Double longitude = location.getLongitude();
 
         vitesse = location.getSpeed();
         //getting the format of the time and the date
@@ -272,7 +277,7 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
         if(googleMap != null)
         {
             LatLng googlePosition = new LatLng(latitude,longitude);
-            //googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(googlePosition));
 
         }
 
